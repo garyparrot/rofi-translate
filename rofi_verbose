@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# configure
+transHistory="$HOME/.rofi_trans"
+transTarget="zh-TW"
+transArg="-no-ansi" 
+
+input="$(rofi -dmenu -p translate -lines 0)"
+
+while [[ -n $input ]]; do
+    result="$(trans --target=$transTarget $transArg "$input")"
+    input="$(rofi -p translate -dmenu -mesg "$result" -lines 0)"
+done
+

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# This is the entry of rofi trans-shell
+# This script require trans-shell itself, if you don't have one.
+# You can install it from your package manager(if provided) or from source(clone trans-shell from github)
+
+rofi -sidebar-mode -modi "translate:./rofi_translate" -show translate
