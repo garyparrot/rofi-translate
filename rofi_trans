@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+# TODO: Implement delete mode
+# TODO: Allow Change translate engine( google, bing, yandax ), the deafult open will be the last use engine
+# TODO: Fix search problem
+
 # This is the entry of rofi trans-shell
 # This script require trans-shell itself, if you don't have one.
 # You can install it from your package manager(if provided) or from source(clone trans-shell from github)
 
-rofi -sidebar-mode -modi "translate:./rofi_translate" -show translate
+rofi -sidebar-mode -modi "translate:rofi_translate" -show translate
