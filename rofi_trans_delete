@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# configure
+transHistory="$HOME/.rofi_trans"
+pattern="$@"
+
+touch $transHistory
+
+# delete pattern
+if [[ -n $pattern ]]; then
+    his="$(cat $transHistory)"
+    echo "$his" | sed "/^${pattern}$/d" > $transHistory
+fi
+
+# print history
+tac $transHistory

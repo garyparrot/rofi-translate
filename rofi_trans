@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: Implement delete mode
 # TODO: Fix search problem
 
 # This is the entry of rofi trans-shell
@@ -12,4 +11,4 @@ default="google"
 if [[ -f "/tmp/rofi_default" ]] && [[ "$(cat /tmp/rofi_default)" == "bing" ]]; then
     default="bing"
 fi
-rofi -sidebar-mode -modi "google:rofi_trans_google,bing:rofi_trans_bing" -show "$default"
+rofi -sidebar-mode -modi "google:rofi_trans_google,bing:rofi_trans_bing,delete:rofi_trans_delete" -show "$default"
