@@ -3,12 +3,16 @@
 touch $transHistory
 
 transText=$@
-echo ok >> /dev/stderr
-echo $transText >> /dev/stderr
+
+if [[ "$verbose" == "1" ]]; then
+    echo ok >> /dev/stderr
+    echo $transText >> /dev/stderr
+fi
 
 function translate {
-    trans --target=$transTarget $transArgs "$1"
+    if [[ $verbose ]]; then set -x; fi
     trans --target=$transTarget -e $primary_translator $transArgs "$1"
+    if [[ $verbose ]]; then set +x; fi
 }
 
 function main {
