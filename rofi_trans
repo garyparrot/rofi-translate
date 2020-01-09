@@ -6,7 +6,22 @@
 # This script require trans-shell itself, if you don't have one.
 # You can install it from your package manager(if provided) or from source(clone trans-shell from github)
 
-default="google"
+function Configs {
+    # The default translator for translate-shell
+    export primary_translator="google"
+    # TODO: Implement secondary_translator feature and update the comment below.
+    # The alternative transltor for translate-shell, not implement at this moment
+    export secondary_translator="bing"
+
+    export transHistory="$HOME/.rofi_trans"
+    export transTarget="zh-TW"
+    export transArgs="-b -speak"
+}
+
+# Setup environment variable for configs.
+Configs
+
+default=$primary_translator
 
 if [[ -f "/tmp/rofi_default" ]] && [[ "$(cat /tmp/rofi_default)" == "bing" ]]; then
     default="bing"

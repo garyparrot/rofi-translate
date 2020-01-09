@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# configure
-transHistory="$HOME/.rofi_trans"
-transTarget="zh-TW"
-transArg=" -b -speak -e bing"
-
 touch $transHistory
 
 transText=$@
@@ -12,7 +7,7 @@ echo ok >> /dev/stderr
 echo $transText >> /dev/stderr
 
 function translate {
-    trans --target=$transTarget $transArg "$1"
+    trans --target=$transTarget $transArgs "$1"
 }
 
 function main {

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # configure
-transHistory="$HOME/.rofi_trans"
 pattern="$@"
 
 touch $transHistory
