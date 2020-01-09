@@ -53,3 +53,32 @@ Add key binding for i3-wm
 ``` plaintext
 bindsym $mod+t exec rofi_trans
 ```
+
+### Configuration of rofi-translate
+
+Open the file ``rofi_trans`` with your text editor.
+Then make changes to these environment variables.
+
+```bash
+function Configs {
+    # the default translation engine for translate-shell.
+    export primary_translator="google"
+
+    # the alternative translation engine for translate-shell. Once the primary engine malfunctioned, the secondary engine replace it.
+    export secondary_translator="bing"
+
+    # the file use to storing your translating history.
+    export transHistory="$HOME/.rofi_trans"
+
+    # target language for translation
+    export transTarget="zh-TW"
+
+    # transArgs: Arguement for translate shell
+    export transArgs="-b -speak"
+
+    # display some debug information, run it in shell so you can see it
+    export verbose="1"
+
+    export version=1
+}
+```
