@@ -5,7 +5,9 @@ transArgNoAnsi="-no-ansi"
 
 if [[ $version -lt 1 ]]; then
     DeprecatedMessage="Calling rofi_verbose directly is not recommend in the new version, consider \"rofi_trans verbose\""
-    input="$(rofi -mesg "$DeprecatedMessage" -dmenu -p translate -lines 0)"
+    # A hacky way to solve the version problem :3
+    printf "$DeprecatedMessage\n"
+    exec rofi_trans verbose
 else
     input="$(rofi -dmenu -p translate -lines 0)"
 fi
