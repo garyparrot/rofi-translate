@@ -8,6 +8,7 @@ echo $transText >> /dev/stderr
 
 function translate {
     trans --target=$transTarget $transArgs "$1"
+    trans --target=$transTarget -e $primary_translator $transArgs "$1"
 }
 
 function main {
@@ -16,12 +17,19 @@ function main {
         if [[ ! $transText == '#'* ]]; then
             # translate input 
             transResult="$(translate "$transText")"
+
+            # If the translation result is empty, that might means the translator is not available at this moment.
+            # Switch to secondary transltor and do that again
+            if [[ -z "$transResult" ]]; then
+                primary_translator=$secondary_translator 
+                transResult="$(translate "$transText")"
+            fi
+
             printf "#\t%-40s\t%s\n" "$transText" "$transResult" >> $transHistory
         else
             # speak it again
             translate "$(echo "$transText" | cut -f2)" >> /dev/null
         fi
-        echo "google" > /tmp/rofi_default
     fi
 
     tac $transHistory
