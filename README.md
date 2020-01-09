@@ -46,7 +46,7 @@ rofi_trans
 ```
 
 ``` bash
-rofi_verbose
+rofi_trans verbose
 ```
 
 Add key binding for i3-wm

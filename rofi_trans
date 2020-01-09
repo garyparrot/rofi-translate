@@ -16,9 +16,14 @@ function Configs {
     export transTarget="zh-TW"
     export transArgs="-b -speak"
     export verbose="1"
+    export version=1
 }
 
 # Setup environment variable for configs.
 Configs
 
-rofi -sidebar-mode -modi "translator:rofi_trans_google,delete:rofi_trans_delete" -show "translator"
+if [[ "$1" == "verbose" ]]; then
+    rofi_verbose
+else
+    rofi -sidebar-mode -modi "translator:rofi_trans_google,delete:rofi_trans_delete" -show "translator"
+fi
