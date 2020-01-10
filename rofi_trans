@@ -13,7 +13,9 @@ function Configs {
     export secondary_translator="bing"
 
     export transHistory="$HOME/.rofi_trans"
+    export transAudioCacheDir="$HOME/.rofi_trans_audio"
     export transTarget="zh-TW"
+    export save_audio="save_audio"
     export transArgs="-b -speak"
     export verbose="1"
     export version=1

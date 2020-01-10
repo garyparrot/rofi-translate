@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+# TODO: Fix a bug, [] remove everything from trans history
+
 touch $transHistory
 
-transText=$@
+transText=`echo "$@" | sed 's/^[[:space:]]*//'`
 
 if [[ "$verbose" == "1" ]]; then
     echo ok >> /dev/stderr
@@ -11,7 +13,15 @@ fi
 
 function translate {
     if [[ $verbose ]]; then set -x; fi
-    trans --target=$transTarget -e $primary_translator $transArgs "$1"
+
+    if [[ "$save_audio" == "save_audio" ]]; then
+        # Save the audio file at local. 
+        mkdir "$transAudioCacheDir"
+        trans --target=$transTarget -e $primary_translator -b -speak -download-audio-as "$transAudioCacheDir/$1.mpeg" "$1"
+    else
+        trans --target=$transTarget -e $primary_translator -b -speak "$1"
+    fi
+
     if [[ $verbose ]]; then set +x; fi
 }
 
@@ -31,8 +41,14 @@ function main {
 
             printf "#\t%-40s\t%s\n" "$transText" "$transResult" >> $transHistory
         else
-            # speak it again
-            translate "$(echo "$transText" | cut -f2)" >> /dev/null
+            transText="$(echo "$transText" | cut -f2)"
+            if [[ -f "$transAudioCacheDir/$transText.mpeg" ]]; then
+                # play cached audio file and call it a day
+                mplayer "$transAudioCacheDir/$transText.mpeg" > /dev/null 2>&1 &
+            else
+                # speak it again
+                translate "$transText" >> /dev/null
+            fi
         fi
     fi
 
