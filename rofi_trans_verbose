@@ -23,6 +23,12 @@ function verbose {
         if [[ $entryExist == "1" ]]; then
             # Note: entry doesn't exists if the value is "1"
             printf "#\t%-40s\t%s\n" "$input" "$translation" >> $transHistory
+        else
+            # The entry exists, move it to the top of history
+            entry=`cat $transHistory | grep -P "#[[:space:]]*${pattern}[[:space:]]*\t"`
+            historyContent="$(cat $transHistory)"
+            echo "$historyContent" | sed "/^${entry}$/d" > $transHistory
+            echo "$entry" >> $transHistory
         fi
 
         # display the result by rofi
