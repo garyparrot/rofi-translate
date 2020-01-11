@@ -4,6 +4,7 @@
 
 touch $transHistory
 
+transText_org="$@"
 transText=`echo "$@" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
 
 if [[ "$verbose" == "1" ]]; then
@@ -47,8 +48,14 @@ function main {
                 mplayer "$transAudioCacheDir/$transText.mpeg" > /dev/null 2>&1 &
             else
                 # speak it again
-                translate "$transText" >> /dev/null
+                translate "$transText"
             fi
+
+            # update history. let the target entry move to top.
+            pattern="$(echo "$transText_org" | sed -e 's/[]\/$*.^[]/\\&/g' )"
+            historyContent="$(cat $transHistory)"
+            echo "$historyContent" | sed "/^${pattern}$/d" > $transHistory
+            echo "$transText_org" >> $transHistory
         fi
     fi
 
