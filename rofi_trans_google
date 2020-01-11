@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: Fix a bug, [] remove everything from trans history
-
 touch $transHistory
 
 transText_org="$@"

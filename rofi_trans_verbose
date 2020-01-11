@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+function handle_input {
+    transText="$@"
+    if [[ "$transText" == '#'* ]]; then
+        transText="$(echo "$transText" | cut -d ' ' -f2 )"
+    fi
+    transText="$(echo $transText | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+}
+
+function verbose {
+    sleep 0.1
+    transArgNoAnsi="-no-ansi"
+
+    while [[ -n $input ]]; do
+        result="$(trans --target=$transTarget $transArgNoAnsi "$input")"
+        input="$(rofi -p translate -dmenu -mesg "$result" -lines 0)"
+    done
+
+    # Switch back to stage1
+    exec env default="verbose" stage2="" rofi_trans
+}
+
+# Deal with the input 
+handle_input $@
+
+if [[ "$stage2" == "yes" ]]; then
+    # Stage 2
+    verbose
+elif [[ "$transText" == "" ]]; then
+    # Stage 1
+    tac $transHistory
+else
+    # Transition between stage 1 and stage 2
+
+    # Potential race condition show up here, but I am too lame to fix it XDDDDD
+    env stage2="yes" input="$transText" rofi_trans_verbose &
+    pkill -u $USER rofi
+fi
