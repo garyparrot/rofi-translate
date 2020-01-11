@@ -24,7 +24,7 @@ function Configs {
 # Setup environment variable for configs.
 Configs
 
-if [[ -z "$default" ]]; then default="translator"; fi
+if [[ -z "$default" ]]; then default="brief"; fi
 if [[ "$1" == "verbose" ]]; then default="verbose"; fi
 
-rofi -sidebar-mode -modi "verbose:rofi_trans_verbose,translator:rofi_trans_google,delete:rofi_trans_delete" -show "$default"
+rofi -sidebar-mode -modi "verbose:rofi_trans_verbose,brief:rofi_trans_brief,delete:rofi_trans_delete" -show "$default"
