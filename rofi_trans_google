@@ -4,7 +4,7 @@
 
 touch $transHistory
 
-transText=`echo "$@" | sed 's/^[[:space:]]*//'`
+transText=`echo "$@" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
 
 if [[ "$verbose" == "1" ]]; then
     echo ok >> /dev/stderr
@@ -41,7 +41,7 @@ function main {
 
             printf "#\t%-40s\t%s\n" "$transText" "$transResult" >> $transHistory
         else
-            transText="$(echo "$transText" | cut -f2)"
+            transText="$(echo "$transText" | cut -f2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
             if [[ -f "$transAudioCacheDir/$transText.mpeg" ]]; then
                 # play cached audio file and call it a day
                 mplayer "$transAudioCacheDir/$transText.mpeg" > /dev/null 2>&1 &
