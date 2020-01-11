@@ -9,10 +9,23 @@ function handle_input {
 
 function verbose {
     sleep 0.1
-    transArgNoAnsi="-no-ansi"
+    transArgNoAnsi="-no-ansi -show-original-phonetics n"
 
     while [[ -n "$input" ]]; do
+        # request translation from translate-shell
         result="$(trans --target=$transTarget $transArgNoAnsi "$input")"
+        translation="$(echo "$result" | sed '3!d')"
+        
+        # store history if the search target not exist in history 
+        pattern="$(echo "$input" | sed -e 's/[]\/$*.^[]/\\&/g' )"
+        cat $transHistory | awk -F '\t' 'BEGIN { OFS = FS } { print $2 }' | grep "^${pattern}[[:space:]]*$"
+        entryExist="$?"
+        if [[ $entryExist == "1" ]]; then
+            # Note: entry doesn't exists if the value is "1"
+            printf "#\t%-40s\t%s\n" "$input" "$translation" >> $transHistory
+        fi
+
+        # display the result by rofi
         input="$(rofi -p translate -dmenu -mesg "$result" -lines 0)"
     done
 
