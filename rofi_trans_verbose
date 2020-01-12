@@ -4,7 +4,7 @@ function handle_input {
     if [[ "$transText" == '#'* ]]; then
         transText="$(echo "$transText" | cut -f2 )"
     fi
-    transText="$(echo $transText | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    transText="$(echo "$transText" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
 }
 
 function verbose {
@@ -12,6 +12,7 @@ function verbose {
     transArgNoAnsi="-no-ansi -show-original-phonetics n"
 
     while [[ -n "$input" ]]; do
+        # Escape input string
         # request translation from translate-shell
         result="$(trans --target=$transTarget $transArgNoAnsi "$input")"
         translation="$(echo "$result" | sed '3!d')"
@@ -25,9 +26,10 @@ function verbose {
             printf "#\t%-40s\t%s\n" "$input" "$translation" >> $transHistory
         else
             # The entry exists, move it to the top of history
-            entry=`cat $transHistory | grep -P "#[[:space:]]*${pattern}[[:space:]]*\t"`
+            entry=`cat $transHistory | grep -P -m 1 "#[[:space:]]*${pattern}[[:space:]]*\t"`
+            entry_escaped="$(echo $entry | sed -e 's/[]\/$*.^[]/\\&/g')"
             historyContent="$(cat $transHistory)"
-            echo "$historyContent" | sed "/^${entry}$/d" > $transHistory
+            echo "$historyContent" | sed "/^#\t*${pattern}[[:space:]]*\t/d" > $transHistory
             echo "$entry" >> $transHistory
         fi
 
