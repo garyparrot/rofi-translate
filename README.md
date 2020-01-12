@@ -4,15 +4,15 @@ Simple rofi script for translation based on [translate shell](https://github.com
 
 ## Demo
 
-### rofi-verbose
+### Brief mode
 
-Verbose translation.
+Brief translation, provide simple translation with pronunciation audio.
 
 ![Demo1](./demo/demo1.gif)
 
-### rofi-trans
+### Verbose mode
 
-Speaking on translation, help you with the pronunciation.
+Provide detail of specific translation
 
 ![Demo2](./demo/demo2.gif)
 
@@ -20,10 +20,11 @@ Speaking on translation, help you with the pronunciation.
 
 * [rofi](https://github.com/davatorium/rofi)
 * [translate shell](https://github.com/soimort/translate-shell)
+* mplayer (without it you can't play the audio file)
 
 ### Archlinux
 ``` bash
-sudo pacman -S translate-shell rofi 
+sudo pacman -S translate-shell rofi mplayer
 ```
 
 ## Install
@@ -39,14 +40,14 @@ Edit `.xprofile`, add the following line.
 export PATH=~/rofi-translate:$PATH
 ```
 
-### Using
+### Usage
+
 shell
 ``` bash
-rofi_trans
-```
-
-``` bash
-rofi_trans verbose
+$ rofi_trans
+$ rofi_trans brief
+$ rofi_trans verbose
+$ rofi_trans delete
 ```
 
 Add key binding for i3-wm
@@ -70,6 +71,9 @@ function Configs {
     # the file use to storing your translating history.
     export transHistory="$HOME/.rofi_trans"
 
+    # Directory for cache audio files
+    export transAudioCacheDir="$HOME/.rofi_trans_audio"
+
     # target language for translation
     export transTarget="zh-TW"
 
@@ -78,6 +82,9 @@ function Configs {
 
     # display some debug information, run it in shell so you can see it
     export verbose="1"
+
+    # auto refresh the content of each mode after every operation, this will cause the rofi flash(close and open)
+    export auto_refresh="1"
 
     export version=1
 }

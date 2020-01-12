@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+touch $transHistory
+
+transText_org="$@"
+transText=`echo "$@" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+
+if [[ "$verbose" == "1" ]]; then
+    echo ok >> /dev/stderr
+    echo $transText >> /dev/stderr
+fi
+
+function refresh {
+    sh -c 'sleep 0.05 ; env default="brief" rofi_trans' &
+    pkill -u $USER rofi
+}
+
+function translate {
+    if [[ $verbose ]]; then set -x; fi
+
+    if [[ "$save_audio" == "save_audio" ]]; then
+        # Save the audio file at local. 
+        mkdir "$transAudioCacheDir"
+        trans --target=$transTarget -e $primary_translator -b -speak -download-audio-as "$transAudioCacheDir/$1.mpeg" "$1"
+    else
+        trans --target=$transTarget -e $primary_translator -b -speak "$1"
+    fi
+
+    if [[ $verbose ]]; then set +x; fi
+}
+
+function main {
+
+    if [[ -n $transText ]]; then
+        if [[ ! $transText == '#'* ]]; then
+            # translate input 
+            transResult="$(translate "$transText")"
+
+            # If the translation result is empty, that might means the translator is not available at this moment.
+            # Switch to secondary transltor and do that again
+            if [[ -z "$transResult" ]]; then
+                primary_translator=$secondary_translator 
+                transResult="$(translate "$transText")"
+            fi
+
+            printf "#\t%-40s\t%s\n" "$transText" "$transResult" >> $transHistory
+        else
+            transText="$(echo "$transText" | cut -f2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+            if [[ -f "$transAudioCacheDir/$transText.mpeg" ]]; then
+                # play cached audio file and call it a day
+                mplayer "$transAudioCacheDir/$transText.mpeg" > /dev/null 2>&1 &
+                usleep 100000
+            else
+                # speak it again
+                translate "$transText"
+            fi
+
+            # update history. let the target entry move to top.
+            pattern="$(echo "$transText_org" | sed -e 's/[]\/$*.^[]/\\&/g' )"
+            historyContent="$(cat $transHistory)"
+            echo "$historyContent" | sed "/^${pattern}$/d" > $transHistory
+            echo "$transText_org" >> $transHistory
+        fi
+
+        # Auto refresh content of each script mode
+        if [[ "$auto_refresh" == "1" ]]; then
+            refresh
+        fi
+    fi
+
+    tac $transHistory
+}
+
+main

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+function handle_input {
+    transText="$@"
+    if [[ "$transText" == '#'* ]]; then
+        transText="$(echo "$transText" | cut -f2 )"
+    fi
+    transText="$(echo "$transText" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+}
+
+function verbose {
+    sleep 0.1
+    transArgNoAnsi="-no-ansi -show-original-phonetics n"
+
+    while [[ -n "$input" ]]; do
+        # Escape input string
+        # request translation from translate-shell
+        result="$(trans --target=$transTarget $transArgNoAnsi "$input")"
+        translation="$(echo "$result" | sed '3!d')"
+        
+        # store history if the search target not exist in history 
+        pattern="$(echo "$input" | sed -e 's/[]\/$*.^[]/\\&/g' )"
+        cat $transHistory | awk -F '\t' 'BEGIN { OFS = FS } { print $2 }' | grep "^${pattern}[[:space:]]*$"
+        entryExist="$?"
+        if [[ $entryExist == "1" ]]; then
+            # Note: entry doesn't exists if the value is "1"
+            printf "#\t%-40s\t%s\n" "$input" "$translation" >> $transHistory
+        else
+            # The entry exists, move it to the top of history
+            entry=`cat $transHistory | grep -P -m 1 "#[[:space:]]*${pattern}[[:space:]]*\t"`
+            entry_escaped="$(echo $entry | sed -e 's/[]\/$*.^[]/\\&/g')"
+            historyContent="$(cat $transHistory)"
+            echo "$historyContent" | sed "/^#\t*${pattern}[[:space:]]*\t/d" > $transHistory
+            echo "$entry" >> $transHistory
+        fi
+
+        # display the result by rofi
+        input="$(rofi -p translate -dmenu -mesg "$result" -lines 0)"
+    done
+
+    # Switch back to stage1
+    exec env default="verbose" stage2="" rofi_trans
+}
+
+# Deal with the input 
+handle_input "$@"
+
+if [[ "$stage2" == "yes" ]]; then
+    # Stage 2
+    verbose
+elif [[ "$transText" == "" ]]; then
+    # Stage 1
+    tac $transHistory
+else
+    # Transition between stage 1 and stage 2
+
+    # Potential race condition show up here, but I am too lame to fix it XDDDDD
+    env stage2="yes" input="$transText" rofi_trans_verbose &
+    pkill -u $USER rofi
+fi
