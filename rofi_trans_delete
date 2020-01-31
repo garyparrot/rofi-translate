@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function refresh {
-    sh -c 'sleep 0.05 ; env default="delete" rofi_trans' &
+    sh -c ' sleep 0.1 ; while pgrep rofi ; ret=$? ; [ $ret -eq 0 ]; do sleep 0.1; done; env default="brief" rofi_trans' &
     pkill -u $USER rofi
 }
 

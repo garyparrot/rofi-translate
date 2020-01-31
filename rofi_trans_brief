@@ -11,7 +11,7 @@ if [[ "$verbose" == "1" ]]; then
 fi
 
 function refresh {
-    sh -c 'sleep 0.05 ; env default="brief" rofi_trans' &
+    sh -c ' sleep 0.1 ; while pgrep rofi ; ret=$? ; [ $ret -eq 0 ]; do sleep 0.1; done; env default="brief" rofi_trans' &
     pkill -u $USER rofi
 }
 

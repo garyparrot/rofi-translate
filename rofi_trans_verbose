@@ -53,7 +53,6 @@ elif [[ "$transText" == "" ]]; then
 else
     # Transition between stage 1 and stage 2
 
-    # Potential race condition show up here, but I am too lame to fix it XDDDDD
-    env stage2="yes" input="$transText" rofi_trans_verbose &
     pkill -u $USER rofi
+    env stage2="yes" input="$transText" rofi_trans_verbose &
 fi
