@@ -93,6 +93,9 @@ export SOURCE_LANG=""
 # Save audio to local
 export save_audio="save_audio"
 
+# Save audio for secondary translator, some translator doesn't support pronunciation.
+export save_audio_secondary_translator=""
+
 # transArgs: Arguement for translate shell
 export transArgs="-b -speak"
 

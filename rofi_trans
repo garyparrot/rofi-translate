@@ -18,6 +18,7 @@ function Default_Configs {
     export SOURCE_LANG=""
     export transTarget="zh-TW"          # deprecated, use TARGET_LANG instead
     export save_audio="save_audio"
+    export save_audio_secondary_translator=""
     export transArgs="-b -speak"
     export verbose="1"
     export auto_refresh="1"

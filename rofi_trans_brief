@@ -39,7 +39,8 @@ function main {
             # If the translation result is empty, that might means the translator is not available at this moment.
             # Switch to secondary transltor and do that again
             if [[ -z "$transResult" ]]; then
-                primary_translator=$secondary_translator 
+                primary_translator="$secondary_translator"
+                save_audio="$save_audio_secondary_translator"
                 transResult="$(translate "$transText")"
             fi
 
