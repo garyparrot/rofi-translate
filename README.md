@@ -57,42 +57,48 @@ bindsym $mod+t exec rofi_trans
 
 ### Configuration of rofi-translate
 
-Open the file ``rofi_trans`` with your text editor.
-Then make changes to these environment variables.
+There is a default config in the script itself. if you want a separate config file, follow the instruction below.
+
+Create file ``$XDG_CONFIG_HOME/rofi_translate/rofi_translate.config``
 
 ```bash
-function Configs {
-    # the default translation engine for translate-shell.
-    export primary_translator="google"
+if [ -z ${XDG_CONFIG_HOME+x} ]; then
+    XDG_CONFIG_HOME="$HOME/.config"
+fi
+mkdir -p "$XDG_CONFIG_HOME/rofi_translate" && touch "$XDG_CONFIG_HOME/rofi_translate/rofi_translate.config"
+```
 
-    # the alternative translation engine for translate-shell. Once the primary engine malfunctioned, the secondary engine replace it.
-    export secondary_translator="bing"
+Open that file and paste the default config below.
 
-    # the file use to storing your translating history.
-    export transHistory="$HOME/.rofi_trans"
+```bash
+# the default translation engine for translate-shell.
+export primary_translator="google"
 
-    # Directory for cache audio files
-    export transAudioCacheDir="$HOME/.rofi_trans_audio"
+# the alternative translation engine for translate-shell. Once the primary engine malfunctioned, the secondary engine replace it.
+export secondary_translator="bing"
 
-    # Target Language
-    # Code list (https://github.com/soimort/translate-shell#code-list)
-    export TARGET_LANG="zh-TW"
+# the file use to storing your translating history.
+export transHistory="$HOME/.rofi_trans"
 
-    # Source Language, leave it blank stands for auto-detected
-    export SOURCE_LANG=""
+# Directory for cache audio files
+export transAudioCacheDir="$HOME/.rofi_trans_audio"
 
-    # DEPRECATED: target language for translation
-    # export transTarget="zh-TW"
+# Target Language
+# Code list (https://github.com/soimort/translate-shell#code-list)
+export TARGET_LANG="zh-TW"
 
-    # transArgs: Arguement for translate shell
-    export transArgs="-b -speak"
+# Source Language, leave it blank stands for auto-detected
+export SOURCE_LANG=""
 
-    # display some debug information, run it in shell so you can see it
-    export verbose="1"
+# Save audio to local
+export save_audio="save_audio"
 
-    # auto refresh the content of each mode after every operation, this will cause the rofi flash(close and open)
-    export auto_refresh="1"
+# transArgs: Arguement for translate shell
+export transArgs="-b -speak"
 
-    export version=1
-}
+# display some debug information, run it in shell so you can see it
+export verbose="1"
+
+# auto refresh the content of each mode after every operation, this will cause the rofi flash(close and open)
+export auto_refresh="1"
 ```

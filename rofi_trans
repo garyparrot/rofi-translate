@@ -6,7 +6,7 @@
 # This script require trans-shell itself, if you don't have one.
 # You can install it from your package manager(if provided) or from source(clone trans-shell from github)
 
-function Configs {
+function Default_Configs {
     # The default translator for translate-shell
     export primary_translator="google"
     # The alternative transltor for translate-shell
@@ -21,11 +21,20 @@ function Configs {
     export transArgs="-b -speak"
     export verbose="1"
     export auto_refresh="1"
-    export version=1
 }
+export version=1
+
+if [ -z ${XDG_CONFIG_HOME+x} ]; then
+    export XDG_CONFIG_HOME="$HOME/.config"
+fi
 
 # Setup environment variable for configs.
-Configs
+if [[ -f "$XDG_CONFIG_HOME/rofi_translate/rofi_translate.config" ]]; then
+    source "$XDG_CONFIG_HOME/rofi_translate/rofi_translate.config" 
+else
+    Default_Configs
+fi
+
 
 if [[ -z "$default"     ]]; then default="brief"; fi
 if [[ "$1" == "verbose" ]]; then default="verbose"; fi
