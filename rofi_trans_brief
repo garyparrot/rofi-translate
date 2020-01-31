@@ -50,7 +50,7 @@ function main {
             if [[ -f "$transAudioCacheDir/$transText.mpeg" ]]; then
                 # play cached audio file and call it a day
                 mplayer "$transAudioCacheDir/$transText.mpeg" > /dev/null 2>&1 &
-                usleep 100000
+                sleep 0.1
             else
                 # speak it again
                 translate "$transText"
