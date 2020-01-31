@@ -14,7 +14,9 @@ function Configs {
 
     export transHistory="$HOME/.rofi_trans"
     export transAudioCacheDir="$HOME/.rofi_trans_audio"
-    export transTarget="zh-TW"
+    export TARGET_LANG="zh-TW"
+    export SOURCE_LANG=""
+    export transTarget="zh-TW"          # deprecated, use TARGET_LANG instead
     export save_audio="save_audio"
     export transArgs="-b -speak"
     export verbose="1"

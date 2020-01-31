@@ -21,9 +21,9 @@ function translate {
     if [[ "$save_audio" == "save_audio" ]]; then
         # Save the audio file at local. 
         mkdir "$transAudioCacheDir"
-        trans --target=$transTarget -e $primary_translator -b -speak -download-audio-as "$transAudioCacheDir/$1.mpeg" "$1"
+        trans -e $primary_translator -b -speak -download-audio-as "$transAudioCacheDir/$1.mpeg" "$1"
     else
-        trans --target=$transTarget -e $primary_translator -b -speak "$1"
+        trans -e $primary_translator -b -speak "$1"
     fi
 
     if [[ $verbose ]]; then set +x; fi

@@ -74,8 +74,15 @@ function Configs {
     # Directory for cache audio files
     export transAudioCacheDir="$HOME/.rofi_trans_audio"
 
-    # target language for translation
-    export transTarget="zh-TW"
+    # Target Language
+    # Code list (https://github.com/soimort/translate-shell#code-list)
+    export TARGET_LANG="zh-TW"
+
+    # Source Language, leave it blank stands for auto-detected
+    export SOURCE_LANG=""
+
+    # DEPRECATED: target language for translation
+    # export transTarget="zh-TW"
 
     # transArgs: Arguement for translate shell
     export transArgs="-b -speak"

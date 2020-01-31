@@ -14,7 +14,7 @@ function verbose {
     while [[ -n "$input" ]]; do
         # Escape input string
         # request translation from translate-shell
-        result="$(trans --target=$transTarget $transArgNoAnsi "$input")"
+        result="$(trans $transArgNoAnsi "$input")"
         translation="$(echo "$result" | sed '3!d')"
         
         # store history if the search target not exist in history 
