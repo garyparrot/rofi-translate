@@ -5,8 +5,17 @@ function refresh {
     pkill -u $USER rofi
 }
 
+function text_source {
+    if [[ ! -z "$text" ]]; then
+        echo "$(grep -P "#\t${text}" $transHistory | head -1)"
+    else
+        echo "$@"
+    fi
+}
+
 # configure
-pattern="$@"
+pattern="$(text_source "$@")"
+unset text
 
 touch $transHistory
 

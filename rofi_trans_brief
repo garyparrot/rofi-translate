@@ -2,8 +2,20 @@
 
 touch $transHistory
 
-transText_org="$@"
-transText=`echo "$@" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+function exists {
+    grep -P "#\t${1}" $transHistory > /dev/null && echo yes || echo no
+}
+function text_source {
+    if [[ ! -z "$text" ]]; then
+        echo "$text"
+    else
+        echo "$@"
+    fi
+}
+
+transText_org="$(text_source "$@")"
+transText=`echo "$(text_source "$@")" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+unset text
 
 if [[ "$verbose" == "1" ]]; then
     echo ok >> /dev/stderr
@@ -31,7 +43,7 @@ function translate {
 
 function main {
 
-    if [[ -n $transText ]]; then
+    if [[ -n $transText ]] && [[ $(exists $transText) == "no" ]]; then
         if [[ ! $transText == '#'* ]]; then
             # translate input 
             transResult="$(translate "$transText")"

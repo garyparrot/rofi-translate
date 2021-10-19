@@ -6,6 +6,8 @@
 # This script require trans-shell itself, if you don't have one.
 # You can install it from your package manager(if provided) or from source(clone trans-shell from github)
 
+set -x
+
 function Configs {
     # The default translator for translate-shell
     export primary_translator="google"
@@ -20,15 +22,20 @@ function Configs {
     export verbose="1"
     export auto_refresh="1"
     export version=1
+    # export text=something
 }
 
 # Setup environment variable for configs.
 Configs
 
-if [[ -z "$default"     ]]; then default="brief"; fi
-if [[ "$1" == "verbose" ]]; then default="verbose"; fi
-if [[ "$1" == "brief"   ]]; then default="brief"; fi
-if [[ "$1" == "delete"  ]]; then default="delete"; fi
+if [[ -z "$default"     ]]; then default="brief"; seq="brief:rofi_trans_brief"; fi
+if [[ "$1" == "verbose" ]]; then default="verbose"; seq="verbose:rofi_trans_verbose"; fi
+if [[ "$1" == "brief"   ]]; then default="brief"; seq="brief:rofi_trans_brief"; fi
+if [[ "$1" == "delete"  ]]; then default="delete"; seq="delete:rofi_trans_delete"; fi
 
+if [[ -z "$text" ]]; then
+    rofi -sidebar-mode -modi "verbose:rofi_trans_verbose,brief:rofi_trans_brief,delete:rofi_trans_delete" -show "$default"
+else
+    rofi -sidebar-mode -modi "${seq}" -show "$default"
+fi
 
-rofi -sidebar-mode -modi "verbose:rofi_trans_verbose,brief:rofi_trans_brief,delete:rofi_trans_delete" -show "$default"

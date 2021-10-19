@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 function handle_input {
     transText="$@"
     if [[ "$transText" == '#'* ]]; then
@@ -42,7 +43,9 @@ function verbose {
 }
 
 # Deal with the input 
-handle_input "$@"
+
+handle_input "${text:-$@}"
+unset text
 
 if [[ "$stage2" == "yes" ]]; then
     # Stage 2
